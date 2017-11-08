@@ -1,0 +1,62 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		maven { url 'https://repo.grails.org/grails/core' }
+	}
+	dependencies {
+		classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+		classpath "com.bmuschko:gradle-nexus-plugin:2.3.1"
+	}
+}
+
+version '0.5.0'
+group 'org.grails.plugins'
+
+apply plugin: 'org.grails.grails-plugin'
+apply plugin: 'com.bmuschko.nexus'
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven { url 'https://repo.grails.org/grails/core' }
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.grails:grails-bom:$grailsVersion"
+	}
+	applyMavenExclusions false
+}
+
+dependencies {
+
+	provided 'javax.servlet:javax.servlet-api:3.1.0'
+	provided 'org.grails:grails-dependencies:3.2.11'
+
+	compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1', {
+		['commons-logging', 'xml-apis', 'groovy'].each { exclude module: it }
+	}
+
+	console 'org.grails:grails-console'
+
+	testCompile 'org.grails:grails-plugin-testing'
+}
+
+modifyPom {
+	project {
+		name "Grails Mandrill plugin"
+		inceptionYear "2017"
+	}
+}
+
+extraArchive {
+	sources = false
+	tests = false
+	javadoc = false
+}
+
+nexus {
+	sign = false
+	repositoryUrl = "https://devtools.geckotech.nl/nexus/content/repositories/releases/"
+	snapshotRepositoryUrl = "https://devtools.geckotech.nl/content/repositories/snapshots/"
+}

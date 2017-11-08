@@ -5,3 +5,4 @@
 target/
 grails-mandrill-*.zip
 out/
+build/
